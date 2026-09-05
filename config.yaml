@@ -78,3 +78,16 @@ modes:
       - "备用节点 1"
       - "备用节点 2"
       - "🚀 自动"
+
+# 客户端格式兼容：同一套规则，按客户端输出对应格式
+# 生成器据此决定每个客户端如何消费本仓库规则
+clients:
+  mihomo:            # Nikki / Clash.Meta / Clash Verge
+    rules: "GEOSITE,<类目> 直写 + rules/*.list 展开为 DOMAIN-SUFFIX"
+    rule_sets: "rule-sets/*.list 可作 rule-provider（yaml）"
+  sing-box:          # sing-box 1.8+
+    rules: "geosite:<类目>（内置 geosite.db）或 rule_set 引用 rule-sets/*.list"
+  surge:             # Surge / Stash / Shadowrocket
+    rules: "RULE-SET,https://<repo>/rule-sets/<组>.list,<业务组>"
+  quantumult_x:
+    rules: "filter 远程引用 rule-sets/*.list（转 host-suffix）"

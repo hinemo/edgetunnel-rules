@@ -11,6 +11,10 @@ EdgeTunnel 2.1 节点 + 本仓库分流规则 → 统一 Mihomo/Nikki 订阅 的
 config.yaml           规则元数据：业务组 / geosite 类目 / 补充规则 / 评估顺序 / 测速 / 国家识别
 template/
   proxy-groups.yaml   三级代理组结构模板（业务组 → 模式 → 国家 → 手动HA）
+rule-sets/
+  media.list          🌍 媒体/社交（geosite 类目解析后的通用域名列表）
+  google.list         🌐 Google/Apple
+  academic.list       🎓 学术/AI
 rules/
   cn-direct.list      🇨🇳 国内直连补充（geosite:cn 之外的常用站点）
   academic-ai.list    🎓 学术/AI 补充（geosite 无类目的 AI/开发工具）
@@ -39,6 +43,20 @@ rules/
 | `example.com` | DOMAIN-SUFFIX（含所有子域） |
 | `full:example.com` | 仅精确匹配该域名 |
 | `keyword:xxx` | 域名包含 xxx 即命中 |
+
+## 跨客户端兼容（rule-sets）
+
+`rule-sets/*.list` 是把 geosite 类目解析后的**通用域名列表**（`DOMAIN-SUFFIX,xxx` 格式），
+供没有内置 geosite 的客户端使用，也方便 Clash 系做 rule-provider：
+
+| 客户端 | 用法 |
+|---|---|
+| Mihomo / Clash.Meta / Clash Verge | `GEOSITE,google` 直写；或把 `rule-sets/*.list` 转 rule-provider |
+| sing-box | `geosite:google` 内置；或 `rule_set` 引用 `rule-sets/*.list` |
+| Surge / Stash / Shadowrocket | `RULE-SET,https://raw.githubusercontent.com/hinemo/edgetunnel-rules/main/rule-sets/media.list,🌍 媒体/社交` |
+| Quantumult X | `filter_local` / 远程 filter 引用 `rule-sets/*.list` 转 host-suffix |
+
+raw 地址示例：`https://raw.githubusercontent.com/hinemo/edgetunnel-rules/main/rule-sets/google.list`
 
 ## 规则评估顺序（config.yaml 中 rule_groups 从上到下）
 
