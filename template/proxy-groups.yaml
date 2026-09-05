@@ -2,13 +2,17 @@
 # EdgeTunnel 分流组结构模板：全局自动 / 国家自动 / 手动逐节点选择。
 # ============================================================================
 proxy-groups:
-  - name: "🚀 自动"
+  - name: "♻️ 自动选择"
     type: url-test
     use: [edge]
     filter: ".*"
     url: "https://cp.cloudflare.com/generate_204"
     interval: 300
     tolerance: 50
+
+  - name: "🚀 自动"
+    type: select
+    proxies: ["♻️ 自动选择", "🎯 手动", "🇨🇳 国内", "🇯🇵 日本", "🇸🇬 新加坡", "🇺🇸 美国", "🇩🇪 德国", "🇳🇱 荷兰"]
 
   - name: "🇯🇵 日本"
     type: url-test
@@ -53,7 +57,7 @@ proxy-groups:
   - name: "🎯 手动"
     type: select
     use: [edge]
-    proxies: ["🚀 自动", "🇯🇵 日本", "🇸🇬 新加坡", "🇺🇸 美国", "🇩🇪 德国", "🇳🇱 荷兰"]
+    proxies: ["♻️ 自动选择", "🇯🇵 日本", "🇸🇬 新加坡", "🇺🇸 美国", "🇩🇪 德国", "🇳🇱 荷兰"]
 
   - name: "🎓 学术/AI"
     type: select

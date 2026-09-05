@@ -60,21 +60,27 @@ countries:
     match: "(?i)荷兰|nl"
 
 # 共享策略组：
-#   🚀 自动：全部节点 url-test；各 countries 项：各自国家节点 url-test。
-#   🎯 手动：可选全局自动、任一国家自动，并列出全部原始节点供逐节点选择。
+#   ♻️ 自动选择：全部节点 url-test；各 countries 项：各自国家节点 url-test。
+#   🚀 自动：扁平选择器，可选自动选择、手动、国内或任一国家自动。
+#   🎯 手动：可选自动选择、任一国家自动，并列出全部原始节点供逐节点选择。
 # 不设「国家」容器组，也不设任何 HA/fallback 组。
 modes:
-  auto:
-    name: "🚀 自动"
+  auto_select:
+    name: "♻️ 自动选择"
     type: url-test
     scope: all_nodes
+  auto:
+    name: "🚀 自动"
+    type: select
+    includes: ["♻️ 自动选择", "🎯 手动", "🇨🇳 国内", "各国家自动组"]
   country_auto:
     type: url-test
     scope: country_nodes
   manual:
     name: "🎯 手动"
     type: select
-    includes: ["🚀 自动", "各国家自动组", "全部原始节点"]
+    includes: ["♻️ 自动选择", "各国家自动组", "全部原始节点"]
+
 # 客户端格式兼容：同一套规则，按客户端输出对应格式
 # 生成器据此决定每个客户端如何消费本仓库规则
 clients:
