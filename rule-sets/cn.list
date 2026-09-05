@@ -1,0 +1,32 @@
+# 🇨🇳 国内直连 rule-set（跨客户端通用，DOMAIN-SUFFIX 格式）
+# 来源：rules/cn-direct.list 转换（geosite:cn 之外的常用国内站点）
+DOMAIN-SUFFIX,10010.com
+DOMAIN-SUFFIX,10086.cn
+DOMAIN-SUFFIX,126.com
+DOMAIN-SUFFIX,163.com
+DOMAIN-SUFFIX,189.cn
+DOMAIN-SUFFIX,alipay.com
+DOMAIN-SUFFIX,aliyun.com
+DOMAIN-SUFFIX,apple.com.cn
+DOMAIN-SUFFIX,baidu.com
+DOMAIN-SUFFIX,bilibili.com
+DOMAIN-SUFFIX,boc.cn
+DOMAIN-SUFFIX,cmbchina.com
+DOMAIN-SUFFIX,ctrip.com
+DOMAIN-SUFFIX,dianping.com
+DOMAIN-SUFFIX,douyin.com
+DOMAIN-SUFFIX,icbc.com.cn
+DOMAIN-SUFFIX,icloud.com.cn
+DOMAIN-SUFFIX,jd.com
+DOMAIN-SUFFIX,meituan.com
+DOMAIN-SUFFIX,mi.com
+DOMAIN-SUFFIX,qq.com
+DOMAIN-SUFFIX,sina.com.cn
+DOMAIN-SUFFIX,sohu.com
+DOMAIN-SUFFIX,taobao.com
+DOMAIN-SUFFIX,tencent.com
+DOMAIN-SUFFIX,tmall.com
+DOMAIN-SUFFIX,toutiao.com
+DOMAIN-SUFFIX,weibo.com
+DOMAIN-SUFFIX,xiaomi.com
+DOMAIN-SUFFIX,zhihu.com

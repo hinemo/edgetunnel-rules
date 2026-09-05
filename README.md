@@ -5,6 +5,16 @@ EdgeTunnel 2.1 节点 + 本仓库分流规则 → 统一 Mihomo/Nikki 订阅 的
 - EdgeTunnel 2.1 负责：生成 VLESS + XHTTP + Cloudflare 节点
 - 本仓库负责：分流规则、业务组定义、国家识别、测速参数、三级代理组结构
 
+## 订阅转换配置地址（EdgeTunnel 2.1 后台填这个）
+
+```
+https://raw.githubusercontent.com/hinemo/edgetunnel-rules/main/subconverter/config.ini
+```
+
+- EdgeTunnel 2.1 后台 → **订阅转换配置** → **配置文件地址（SUBCONFIG）** 填上面的 URL
+- EdgeTunnel 会把生成的节点交给 subconverter，用这份 ini（业务组 + 三级模式 + CF 测速 + 本仓库规则）合并出**带规则的订阅**
+- 最终 VPN 订阅地址 = 你自己的 EdgeTunnel 订阅地址（`https://<你的域名>/sub?token=<TOKEN>`，或快速路径 `/<KEY>`）
+
 ## 仓库结构
 
 ```
@@ -12,9 +22,12 @@ config.yaml           规则元数据：业务组 / geosite 类目 / 补充规�
 template/
   proxy-groups.yaml   三级代理组结构模板（业务组 → 模式 → 国家 → 手动HA）
 rule-sets/
+  cn.list             🇨🇳 国内直连补充（Clash 通用格式）
   media.list          🌍 媒体/社交（geosite 类目解析后的通用域名列表）
   google.list         🌐 Google/Apple
   academic.list       🎓 学术/AI
+subconverter/
+  config.ini          EdgeTunnel 2.1 订阅转换配置文件（SUBCONFIG 地址）
 rules/
   cn-direct.list      🇨🇳 国内直连补充（geosite:cn 之外的常用站点）
   academic-ai.list    🎓 学术/AI 补充（geosite 无类目的 AI/开发工具）
