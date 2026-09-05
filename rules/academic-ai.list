@@ -1,132 +1,32 @@
-# 🎓 学术/AI + 开发工具
-# 规则源：blackmatrix7/ios_rule_script (Clash .list)，已转换合并去重
-# 格式：每行一个域名 = DOMAIN-SUFFIX；full: 精确域名；keyword: 关键词
+# 🎓 学术/AI — geosite 补充
+# 主体走 geosite 类目（见 config.yaml academic 组）：openai / anthropic / github
+# 本文件放 geosite 未覆盖的服务与手动补充：
 
-# ── OpenAI ──
-ai.com
-algolia.net
-api.statsig.com
-auth0.com
-chatgpt.com
-chatgpt.livekit.cloud
-client-api.arkoselabs.com
-events.statsigapi.net
-featuregates.org
-host.livekit.cloud
-identrust.com
-intercom.io
-intercomcdn.com
-launchdarkly.com
-oaistatic.com
-oaiusercontent.com
-observeit.net
-openai.com
-openaiapi-site.azureedge.net
-openaicom.imgix.net
-segment.io
-sentry.io
-stripe.com
-turn.livekit.cloud
-full:browser-intake-datadoghq.com
-full:chat.openai.com.cdn.cloudflare.net
-full:openai-api.arkoselabs.com
-full:openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net
-full:openaicomproductionae4b.blob.core.windows.net
-full:production-openaicom-storage.azureedge.net
-full:static.cloudflareinsights.com
-keyword:openai
-
-# ── Anthropic ──
-anthropic.com
-claude.ai
-full:servd-anthropic-website.b-cdn.net
-
-# ── Claude ──
-full:cdn.usefathom.com
-
-# ── Copilot ──
-api.microsoftapp.net
-bing-shopping.microsoft-falcon.io
-challenges.cloudflare.com
-edgeservices.bing.com
-full:api.msn.com
-full:api.statsig.com
-full:assets.msn.com
-full:copilot.microsoft.com
-full:gateway.bingviz.microsoft.net
-full:gateway.bingviz.microsoftapp.net
-full:in.appcenter.ms
-full:location.microsoft.com
-full:odc.officeapps.live.com
-full:r.bing.com
-full:self.events.data.microsoft.com
-full:services.bingapis.com
-full:sydney.bing.com
-full:www.bing.com
-keyword:openaicom-api
-
-# ── Gemini ──
-apis.google.com
-bard.google.com
-deepmind.com
-deepmind.google
-gemini.google.com
-generativeai.google
-proactivebackend-pa.googleapis.com
-full:ai.google.dev
-full:alkalimakersuite-pa.clients6.google.com
-full:makersuite.google.com
-keyword:colab
-keyword:developerprofiles
-keyword:generativelanguage
-
-# ── GitHub ──
-atom.io
-dependabot.com
-ghcr.io
-git.io
-github-atom-io-herokuapp-com.freetls.fastly.net
-github-avatars.oss-cn-hongkong.aliyuncs.com
-github-cloud.s3.amazonaws.com
-github.blog
-github.com
-github.community
-github.dev
-github.io
-githubapp.com
-githubassets.com
-githubcopilot.com
-githubhackathon.com
-githubnext.com
-githubpreview.dev
-githubstatus.com
-githubuniverse.com
-githubusercontent.com
-myoctocat.com
-npm.community
-npmjs.com
-npmjs.org
-opensource.guide
-rawgit.com
-rawgithub.com
-repo.new
-thegithubshop.com
-keyword:github
-
-# ── 手动补充（规则源未覆盖）──
+# 微软 Copilot / Bing AI（geosite:microsoft 太宽，不整体走代理，只代理 AI 子域）
 copilot.microsoft.com
-gist.github.com
-gitlab.com
-groq.com
-huggingface.co
-jsdelivr.net
-mistral.ai
-openai.org
-openrouter.ai
+sydney.bing.com
+
+# Gemini（google 类目归 Google/Apple；本组评估顺序在其前，精确指定归学术/AI）
+gemini.google.com
+generativelanguage.googleapis.com
+ai.google.dev
+
+# Claude（geosite:anthropic 已覆盖，保留作精确兜底）
+claude.ai
+
+# 其他 AI 服务（geosite 无分类）
 perplexity.ai
 poe.com
-raw.githubusercontent.com
+groq.com
+mistral.ai
+huggingface.co
+openrouter.ai
+deepmind.com
+ai.com
 sora.com
-stackexchange.com
+
+# 开发工具补充（geosite:github 之外的）
+gitlab.com
 stackoverflow.com
-sydney.bing.com
+stackexchange.com
+jsdelivr.net

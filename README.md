@@ -8,18 +8,29 @@ EdgeTunnel 2.1 节点 + 本仓库分流规则 → 统一 Mihomo/Nikki 订阅 的
 ## 仓库结构
 
 ```
-config.yaml           规则元数据：业务组 / 规则文件 / 评估顺序 / 测速 / 国家识别
+config.yaml           规则元数据：业务组 / geosite 类目 / 补充规则 / 评估顺序 / 测速 / 国家识别
 template/
   proxy-groups.yaml   三级代理组结构模板（业务组 → 模式 → 国家 → 手动HA）
 rules/
-  cn-direct.list      🇨🇳 国内直连
-  academic-ai.list    🎓 学术/AI + 开发工具
-  media.list          🌍 媒体/社交
-  google.list         🌐 Google 服务
-  apple.list          🍎 Apple 服务
+  cn-direct.list      🇨🇳 国内直连补充（geosite:cn 之外的常用站点）
+  academic-ai.list    🎓 学术/AI 补充（geosite 无类目的 AI/开发工具）
+  media.list          🌍 媒体/社交补充（geosite 无类目的服务，如 Snapchat）
 ```
 
-## 规则文件格式
+## 规则形式：GEOSITE 为主，.list 只做补充
+
+大型服务用 Mihomo 原生 `GEOSITE` 类目，**一行顶几百行**，随设备端 geosite.dat 自动更新（Nikki 已开启 `geox_auto_update`）：
+
+- 🌐 Google/Apple → `GEOSITE,google` + `GEOSITE,apple`（不再维护 google.list / apple.list）
+- 🌍 媒体/社交 → `GEOSITE,youtube`、`netflix`、`disney`、`spotify`、`telegram`、`twitter`、`x`、`facebook`、`instagram`、`tiktok`、`twitch`、`reddit`、`discord`、`pinterest`、`linkedin`、`whatsapp`、`line`、`vimeo`、`tumblr`、`dailymotion`、`medium`、`quora`
+- 🎓 学术/AI → `GEOSITE,openai` + `anthropic` + `github`
+- 🇨🇳 国内 → `GEOSITE,cn` + `GEOIP,CN`（生成器负责）
+
+`.list` 只保留 geosite 没有类目的：Snapchat（media）、Copilot/Gemini/其他 AI 站（academic）、常用国内站点（cn）。
+
+> 为什么不用 `DOMAIN-KEYWORD,google` 这类通配？它会误伤 `google.cn` / `apple.com.cn`（这些必须直连）；Mihomo 没有 `*.google.*` 这类 glob，`GEOSITE` 才是官方维护的“通配集合”。
+
+## 规则文件格式（.list 补充文件）
 
 每行一条规则，`#` 开头为注释：
 
@@ -29,25 +40,13 @@ rules/
 | `full:example.com` | 仅精确匹配该域名 |
 | `keyword:xxx` | 域名包含 xxx 即命中 |
 
-## 规则来源与补充
-
-四个国外业务组（media / google / apple / academic-ai）已在手写基础上，合并
-[blackmatrix7/ios_rule_script](https://github.com/blackmatrix7/ios_rule_script) 的 Clash 规则并去重：
-
-- 转换：`DOMAIN-SUFFIX,x` → `x`；`DOMAIN,x` → `full:x`；`DOMAIN-KEYWORD,x` → `keyword:x`
-- 剔除：所有 `.cn` 结尾的中国区域名（`apple.com.cn` / `icloud.com.cn` / `google.cn` / `g.cn` 等必须直连）
-- 剔除：过宽关键词 `keyword:google`、`keyword:youtube`（会误伤中国区 `google.cn` 等）
-- 不收录：`IP-CIDR` / `PROCESS-NAME` / 复合规则（本仓库只做域名分流）
-
 ## 规则评估顺序（config.yaml 中 rule_groups 从上到下）
 
-1. 🇨🇳 国内 → DIRECT
-2. 🎓 学术/AI（先于 Google，保证 `copilot.microsoft.com` 等精确规则不被误伤）
+1. 🇨🇳 国内 → DIRECT（geosite:cn + cn-direct.list）
+2. 🎓 学术/AI（先于 Google，保证 `gemini.google.com` / `copilot.microsoft.com` 归本组）
 3. 🌍 媒体/社交
 4. 🌐 Google/Apple
 5. 🕸️ 漏网之鱼（`MATCH` 兜底，规则文件中不写）
-
-> 注：`gemini.google.com` 已由 Gemini 规则源加入 `academic-ai.list`（该组评估顺序在 Google 前），归 🎓 学术/AI。
 
 ## 与 EdgeTunnel 2.1 合并
 

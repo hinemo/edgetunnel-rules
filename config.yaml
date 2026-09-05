@@ -5,8 +5,8 @@
 
 meta:
   name: edgetunnel-rules
-  version: "1.0"
-  description: EdgeTunnel 2.1 节点的分流规则与代理组结构（规则端）
+  version: "2.0"
+  description: EdgeTunnel 2.1 节点的分流规则与代理组结构（规则端，GEOSITE 为主）
 
 # 统一测速 / 健康检查（走完整 VLESS+XHTTP+Cloudflare 代理链路）
 health:
@@ -15,25 +15,32 @@ health:
   tolerance: 50        # ms，避免微小抖动导致乒乓切换
 
 # 业务代理组 + 规则评估顺序（从上到下依次匹配）
+# 规则生成方式：
+#   1. geosite 类目 → 生成 GEOSITE,<类目>,<组名> 规则（一条顶几百条，随 geosite.dat 自动更新）
+#   2. files 补充 .list → 生成 DOMAIN-SUFFIX/DOMAIN/full:/keyword: 规则（仅 geosite 未覆盖部分）
+#   cn 组额外：生成 GEOIP,CN → DIRECT（生成器负责）
 rule_groups:
   - id: cn
     name: "🇨🇳 国内"
     target: DIRECT
+    geosite: [cn]
     files:
       - rules/cn-direct.list
   - id: academic
     name: "🎓 学术/AI"
+    geosite: [openai, anthropic, github]
     files:
       - rules/academic-ai.list
   - id: media
     name: "🌍 媒体/社交"
+    geosite: [youtube, netflix, disney, spotify, telegram, twitter, x, facebook,
+              instagram, tiktok, twitch, reddit, discord, pinterest, linkedin,
+              whatsapp, line, vimeo, tumblr, dailymotion, medium, quora]
     files:
       - rules/media.list
   - id: google
     name: "🌐 Google/Apple"
-    files:
-      - rules/google.list
-      - rules/apple.list
+    geosite: [google, apple]
   - id: catchall
     name: "🕸️ 漏网之鱼"
     is_catchall: true   # MATCH 兜底
