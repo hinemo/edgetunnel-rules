@@ -63,4 +63,11 @@ modes:
   manual:
     name: "🎯 手动"
     type: select
-    failover_type: fallback   # 主节点 → 备用节点 → 🚀 自动
+    failover_type: fallback
+    # 故障转移链：主节点 → 备用节点 1 → 备用节点 2 → 🚀 自动（全节点兜底）
+    # 主/备用节点由用户在生成时指定；fallback 永远选第一个健康节点，主恢复自动切回
+    failover_chain:
+      - "主节点（用户指定）"
+      - "备用节点 1"
+      - "备用节点 2"
+      - "🚀 自动"

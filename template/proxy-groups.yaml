@@ -1,0 +1,147 @@
+# ============================================================================
+# 代理组三级结构模板（规则端）
+# 生成器读取 config.yaml + rules/*.list + EdgeTunnel 2.1 节点，套用本模板输出最终 Mihomo/Nikki 订阅。
+# ============================================================================
+#
+# 三级结构：
+#   业务组(L1 select)
+#     ├── 🚀 自动   = url-test(全部节点)                ← 全节点最快
+#     ├── 🌏 国家   = select(国家) → url-test(该国节点)   ← 国家内最快
+#     └── 🎯 手动   = select → fallback(主→备→自动)      ← 指定节点 + 故障转移
+#
+# 测速 / 健康检查（来自 config.yaml health）：
+#   url: https://cp.cloudflare.com/generate_204   ← CF 204，不 ping CF IP，不用 gstatic
+#   interval: 300（秒）/ tolerance: 50（ms）
+#   健康判定：经代理拿到 HTTP 204/200 才算健康；TCP 能连不算。
+#
+# 节点说明：
+#   模板里的节点名是「示例」，保持本文件可被 YAML 解析；
+#   生产环境由生成器替换为 EdgeTunnel 2.1 订阅中的真实节点，
+#   国家组按 config.yaml countries[].match 正则筛（每组注释给出 use/filter 写法）。
+# ============================================================================
+
+proxy-groups:
+  # ================= L1 业务组 =================
+  - name: "🇨🇳 国内"
+    type: select
+    proxies: [DIRECT]
+
+  - name: "🌍 媒体/社交"
+    type: select
+    proxies: ["🚀 自动", "🌏 国家", "🎯 手动-媒体"]
+
+  - name: "🌐 Google/Apple"
+    type: select
+    proxies: ["🚀 自动", "🌏 国家", "🎯 手动-Google"]
+
+  - name: "🎓 学术/AI"
+    type: select
+    proxies: ["🚀 自动", "🌏 国家", "🎯 手动-学术"]
+
+  - name: "🕸️ 漏网之鱼"
+    type: select
+    proxies: ["🚀 自动", "🌏 国家", "🎯 手动-漏网"]
+
+  # ================= L2 模式：🚀 自动（全业务组共享）=================
+  # 生产：use: [edge] + filter: ".*"（全部节点）
+  - name: "🚀 自动"
+    type: url-test
+    proxies:
+      - "🇯🇵 日本 01"      # 示例，生成器替换为全部真实节点
+      - "🇸🇬 新加坡 01"
+      - "🇺🇸 美国 01"
+      - "🇭🇰 香港 01"
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+    tolerance: 50
+
+  # ================= L2 模式：🌏 国家（全业务组共享）=================
+  # 国家组由生成器按 config.yaml countries 循环生成
+  - name: "🌏 国家"
+    type: select
+    proxies: ["🇯🇵 日本", "🇸🇬 新加坡", "🇺🇸 美国", "🇭🇰 香港"]
+
+  # 生产：use: [edge] + filter: '(?i)日本|jp'
+  - name: "🇯🇵 日本"
+    type: url-test
+    proxies: ["🇯🇵 日本 01", "🇯🇵 日本 02", "🇯🇵 日本 03"]
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+    tolerance: 50
+
+  # 生产：use: [edge] + filter: '(?i)新加坡|sg'
+  - name: "🇸🇬 新加坡"
+    type: url-test
+    proxies: ["🇸🇬 新加坡 01", "🇸🇬 新加坡 02"]
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+    tolerance: 50
+
+  # 生产：use: [edge] + filter: '(?i)美国|us'
+  - name: "🇺🇸 美国"
+    type: url-test
+    proxies: ["🇺🇸 美国 01", "🇺🇸 美国 02"]
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+    tolerance: 50
+
+  # 生产：use: [edge] + filter: '(?i)香港|hk'
+  - name: "🇭🇰 香港"
+    type: url-test
+    proxies: ["🇭🇰 香港 01"]
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+    tolerance: 50
+
+  # ================= L2 模式：🎯 手动（每业务组独立）=================
+  # 外层 select：默认选 🛟 手动HA-*（完整故障转移链）；单个节点为“硬指定”逃生舱（无自动切换）
+  - name: "🎯 手动-媒体"
+    type: select
+    proxies:
+      - "🛟 手动HA-媒体"
+      - "🇯🇵 日本 01"
+      - "🇸🇬 新加坡 01"
+      - "🇺🇸 美国 01"
+      - "🇭🇰 香港 01"
+
+  # fallback：主 → 备1 → 备2 → 自动；永远选第一个健康节点，主恢复自动切回
+  - name: "🛟 手动HA-媒体"
+    type: fallback
+    proxies:
+      - "🇯🇵 日本 01"      # 主
+      - "🇯🇵 日本 02"      # 备1
+      - "🇸🇬 新加坡 01"    # 备2
+      - "🚀 自动"          # 兜底：全节点最快
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+
+  # 其余业务组结构相同，生成器按 rule_groups 循环生成
+  - name: "🎯 手动-Google"
+    type: select
+    proxies: ["🛟 手动HA-Google", "🇸🇬 新加坡 01", "🇯🇵 日本 01", "🇺🇸 美国 01", "🇭🇰 香港 01"]
+
+  - name: "🛟 手动HA-Google"
+    type: fallback
+    proxies: ["🇸🇬 新加坡 01", "🇸🇬 新加坡 02", "🇯🇵 日本 01", "🚀 自动"]
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+
+  - name: "🎯 手动-学术"
+    type: select
+    proxies: ["🛟 手动HA-学术", "🇺🇸 美国 01", "🇯🇵 日本 01", "🇸🇬 新加坡 01", "🇭🇰 香港 01"]
+
+  - name: "🛟 手动HA-学术"
+    type: fallback
+    proxies: ["🇺🇸 美国 01", "🇺🇸 美国 02", "🇯🇵 日本 01", "🚀 自动"]
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
+
+  - name: "🎯 手动-漏网"
+    type: select
+    proxies: ["🛟 手动HA-漏网", "🇯🇵 日本 01", "🇸🇬 新加坡 01", "🇺🇸 美国 01", "🇭🇰 香港 01"]
+
+  - name: "🛟 手动HA-漏网"
+    type: fallback
+    proxies: ["🇯🇵 日本 01", "🇸🇬 新加坡 01", "🇺🇸 美国 01", "🚀 自动"]
+    url: "https://cp.cloudflare.com/generate_204"
+    interval: 300
