@@ -29,6 +29,16 @@ rules/
 | `full:example.com` | 仅精确匹配该域名 |
 | `keyword:xxx` | 域名包含 xxx 即命中 |
 
+## 规则来源与补充
+
+四个国外业务组（media / google / apple / academic-ai）已在手写基础上，合并
+[blackmatrix7/ios_rule_script](https://github.com/blackmatrix7/ios_rule_script) 的 Clash 规则并去重：
+
+- 转换：`DOMAIN-SUFFIX,x` → `x`；`DOMAIN,x` → `full:x`；`DOMAIN-KEYWORD,x` → `keyword:x`
+- 剔除：所有 `.cn` 结尾的中国区域名（`apple.com.cn` / `icloud.com.cn` / `google.cn` / `g.cn` 等必须直连）
+- 剔除：过宽关键词 `keyword:google`、`keyword:youtube`（会误伤中国区 `google.cn` 等）
+- 不收录：`IP-CIDR` / `PROCESS-NAME` / 复合规则（本仓库只做域名分流）
+
 ## 规则评估顺序（config.yaml 中 rule_groups 从上到下）
 
 1. 🇨🇳 国内 → DIRECT
@@ -37,8 +47,7 @@ rules/
 4. 🌐 Google/Apple
 5. 🕸️ 漏网之鱼（`MATCH` 兜底，规则文件中不写）
 
-> 注：`gemini.google.com` 会被 `google.com` 后缀规则命中，默认归 Google/Apple；
-> 如需强制归 🎓 学术/AI，在 `academic-ai.list` 加一行 `full:gemini.google.com` 即可（该组已排在 Google 前）。
+> 注：`gemini.google.com` 已由 Gemini 规则源加入 `academic-ai.list`（该组评估顺序在 Google 前），归 🎓 学术/AI。
 
 ## 与 EdgeTunnel 2.1 合并
 

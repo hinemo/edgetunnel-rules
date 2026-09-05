@@ -1,44 +1,132 @@
 # 🎓 学术/AI + 开发工具
-# 评估顺序在 Google/Apple 之前，full:/keyword: 精确规则可优先于宽泛后缀。
+# 规则源：blackmatrix7/ios_rule_script (Clash .list)，已转换合并去重
+# 格式：每行一个域名 = DOMAIN-SUFFIX；full: 精确域名；keyword: 关键词
 
-# OpenAI / ChatGPT
-openai.com
+# ── OpenAI ──
+ai.com
+algolia.net
+api.statsig.com
+auth0.com
 chatgpt.com
+chatgpt.livekit.cloud
+client-api.arkoselabs.com
+events.statsigapi.net
+featuregates.org
+host.livekit.cloud
+identrust.com
+intercom.io
+intercomcdn.com
+launchdarkly.com
 oaistatic.com
 oaiusercontent.com
-openai.org
-sora.com
+observeit.net
+openai.com
+openaiapi-site.azureedge.net
+openaicom.imgix.net
+segment.io
+sentry.io
+stripe.com
+turn.livekit.cloud
+full:browser-intake-datadoghq.com
+full:chat.openai.com.cdn.cloudflare.net
+full:openai-api.arkoselabs.com
+full:openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net
+full:openaicomproductionae4b.blob.core.windows.net
+full:production-openaicom-storage.azureedge.net
+full:static.cloudflareinsights.com
+keyword:openai
 
-# Anthropic / Claude
+# ── Anthropic ──
 anthropic.com
 claude.ai
+full:servd-anthropic-website.b-cdn.net
 
-# 其他 AI 服务
+# ── Claude ──
+full:cdn.usefathom.com
+
+# ── Copilot ──
+api.microsoftapp.net
+bing-shopping.microsoft-falcon.io
+challenges.cloudflare.com
+edgeservices.bing.com
+full:api.msn.com
+full:api.statsig.com
+full:assets.msn.com
+full:copilot.microsoft.com
+full:gateway.bingviz.microsoft.net
+full:gateway.bingviz.microsoftapp.net
+full:in.appcenter.ms
+full:location.microsoft.com
+full:odc.officeapps.live.com
+full:r.bing.com
+full:self.events.data.microsoft.com
+full:services.bingapis.com
+full:sydney.bing.com
+full:www.bing.com
+keyword:openaicom-api
+
+# ── Gemini ──
+apis.google.com
+bard.google.com
+deepmind.com
+deepmind.google
+gemini.google.com
+generativeai.google
+proactivebackend-pa.googleapis.com
+full:ai.google.dev
+full:alkalimakersuite-pa.clients6.google.com
+full:makersuite.google.com
+keyword:colab
+keyword:developerprofiles
+keyword:generativelanguage
+
+# ── GitHub ──
+atom.io
+dependabot.com
+ghcr.io
+git.io
+github-atom-io-herokuapp-com.freetls.fastly.net
+github-avatars.oss-cn-hongkong.aliyuncs.com
+github-cloud.s3.amazonaws.com
+github.blog
+github.com
+github.community
+github.dev
+github.io
+githubapp.com
+githubassets.com
+githubcopilot.com
+githubhackathon.com
+githubnext.com
+githubpreview.dev
+githubstatus.com
+githubuniverse.com
+githubusercontent.com
+myoctocat.com
+npm.community
+npmjs.com
+npmjs.org
+opensource.guide
+rawgit.com
+rawgithub.com
+repo.new
+thegithubshop.com
+keyword:github
+
+# ── 手动补充（规则源未覆盖）──
+copilot.microsoft.com
+gist.github.com
+gitlab.com
+groq.com
+huggingface.co
+jsdelivr.net
+mistral.ai
+openai.org
+openrouter.ai
 perplexity.ai
 poe.com
-groq.com
-mistral.ai
-huggingface.co
-openrouter.ai
-deepmind.com
-ai.com
-
-# 微软 Copilot（仅 AI 子域；microsoft.com 本体默认直连）
-copilot.microsoft.com
-sydney.bing.com
-
-# 开发工具
-github.com
-githubusercontent.com
-githubassets.com
-github.io
-gist.github.com
 raw.githubusercontent.com
-gitlab.com
-stackoverflow.com
+sora.com
 stackexchange.com
-jsdelivr.net
-
-# 说明：gemini.google.com 会被 google.list 的 google.com 后缀规则先命中（归 Google/Apple）。
-# 如需强制归本组，取消下一行注释（本组评估顺序已在 Google 之前）：
-# full:gemini.google.com
+stackoverflow.com
+sydney.bing.com
