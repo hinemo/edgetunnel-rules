@@ -1,0 +1,44 @@
+# 🎓 学术/AI + 开发工具
+# 评估顺序在 Google/Apple 之前，full:/keyword: 精确规则可优先于宽泛后缀。
+
+# OpenAI / ChatGPT
+openai.com
+chatgpt.com
+oaistatic.com
+oaiusercontent.com
+openai.org
+sora.com
+
+# Anthropic / Claude
+anthropic.com
+claude.ai
+
+# 其他 AI 服务
+perplexity.ai
+poe.com
+groq.com
+mistral.ai
+huggingface.co
+openrouter.ai
+deepmind.com
+ai.com
+
+# 微软 Copilot（仅 AI 子域；microsoft.com 本体默认直连）
+copilot.microsoft.com
+sydney.bing.com
+
+# 开发工具
+github.com
+githubusercontent.com
+githubassets.com
+github.io
+gist.github.com
+raw.githubusercontent.com
+gitlab.com
+stackoverflow.com
+stackexchange.com
+jsdelivr.net
+
+# 说明：gemini.google.com 会被 google.list 的 google.com 后缀规则先命中（归 Google/Apple）。
+# 如需强制归本组，取消下一行注释（本组评估顺序已在 Google 之前）：
+# full:gemini.google.com

@@ -1,0 +1,63 @@
+# 🌐 Google 服务
+# 注意：DOMAIN-SUFFIX google.com 不会命中 google.com.hk 等多国域名，需逐个列出。
+
+# 搜索（多国/地区）
+google.com
+google.com.hk
+google.com.tw
+google.co.jp
+google.co.kr
+google.co.uk
+google.co.in
+google.sg
+google.ca
+google.com.au
+google.de
+google.fr
+google.it
+google.es
+google.nl
+google.se
+google.ch
+google.pl
+google.com.br
+google.com.mx
+google.com.tr
+google.com.ar
+google.com.ph
+google.com.vn
+google.com.my
+google.com.sg
+google.co.th
+google.co.id
+google.co.il
+google.co.nz
+google.co.za
+google.ae
+goo.gl
+
+# Google 服务
+googleapis.com
+gstatic.com
+googleusercontent.com
+gvt1.com
+gvt2.com
+gvt3.com
+googlesyndication.com
+googleadservices.com
+google-analytics.com
+googletagmanager.com
+googletagservices.com
+
+# Android / Chrome / Play
+android.com
+chrome.com
+chromium.org
+
+# Blogger
+blogger.com
+blogspot.com
+
+# 开发者站点
+google.dev
+withgoogle.com

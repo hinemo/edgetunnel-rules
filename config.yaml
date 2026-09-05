@@ -1,0 +1,66 @@
+# ============================================================================
+# edgetunnel-rules 规则元数据
+# EdgeTunnel 2.1 节点 + 本文件定义的分流规则 → 统一 Mihomo/Nikki 订阅
+# ============================================================================
+
+meta:
+  name: edgetunnel-rules
+  version: "1.0"
+  description: EdgeTunnel 2.1 节点的分流规则与代理组结构（规则端）
+
+# 统一测速 / 健康检查（走完整 VLESS+XHTTP+Cloudflare 代理链路）
+health:
+  url: https://cp.cloudflare.com/generate_204
+  interval: 300        # 秒
+  tolerance: 50        # ms，避免微小抖动导致乒乓切换
+
+# 业务代理组 + 规则评估顺序（从上到下依次匹配）
+rule_groups:
+  - id: cn
+    name: "🇨🇳 国内"
+    target: DIRECT
+    files:
+      - rules/cn-direct.list
+  - id: academic
+    name: "🎓 学术/AI"
+    files:
+      - rules/academic-ai.list
+  - id: media
+    name: "🌍 媒体/社交"
+    files:
+      - rules/media.list
+  - id: google
+    name: "🌐 Google/Apple"
+    files:
+      - rules/google.list
+      - rules/apple.list
+  - id: catchall
+    name: "🕸️ 漏网之鱼"
+    is_catchall: true   # MATCH 兜底
+
+# 国家池：按节点名正则分类（节点命名必须含国家标识）
+# 每个国家会生成一个 url-test 组（该国节点中最快）
+countries:
+  - name: "🇯🇵 日本"
+    match: "(?i)日本|jp"
+  - name: "🇸🇬 新加坡"
+    match: "(?i)新加坡|sg"
+  - name: "🇺🇸 美国"
+    match: "(?i)美国|us"
+  - name: "🇭🇰 香港"
+    match: "(?i)香港|hk"
+
+# 每个业务组统一提供三种选择模式
+# 🚀 自动 = url-test(全部节点)；🌏 国家 = select(国家) → url-test(该国节点)
+# 🎯 手动 = select → fallback(主→备→自动)
+modes:
+  auto:
+    name: "🚀 自动"
+    type: url-test
+  country:
+    name: "🌏 国家"
+    type: select
+  manual:
+    name: "🎯 手动"
+    type: select
+    failover_type: fallback   # 主节点 → 备用节点 → 🚀 自动

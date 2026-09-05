@@ -1,0 +1,51 @@
+# 🇨🇳 国内直连（常用站点）
+# 完整国内流量由设备端 GEOSITE,cn / GEOIP,CN 兜底，本文件只列常用域名。
+# 注意：apple.com.cn / icloud.com.cn 必须直连，不要加进 apple.list。
+
+# 搜索 / 门户
+baidu.com
+qq.com
+tencent.com
+sina.com.cn
+sohu.com
+163.com
+126.com
+
+# 电商
+taobao.com
+tmall.com
+jd.com
+alipay.com
+
+# 视频 / 社交
+bilibili.com
+douyin.com
+weibo.com
+zhihu.com
+
+# 资讯
+toutiao.com
+
+# 出行 / 生活
+meituan.com
+dianping.com
+ctrip.com
+
+# 手机厂商 / 云
+xiaomi.com
+mi.com
+aliyun.com
+
+# 运营商
+10086.cn
+10010.com
+189.cn
+
+# 银行
+icbc.com.cn
+cmbchina.com
+boc.cn
+
+# 苹果中国（直连）
+apple.com.cn
+icloud.com.cn
