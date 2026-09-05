@@ -61,8 +61,6 @@ DOMAIN-SUFFIX,octocaptcha.com
 DOMAIN,auth.openai.com
 DOMAIN,ios.chat.openai.com
 DOMAIN-SUFFIX,openai.com
-DOMAIN,auth.openai.com
-DOMAIN,ios.chat.openai.com
 DOMAIN-SUFFIX,openai.com.cdn.cloudflare.net
 DOMAIN-SUFFIX,openrouter.ai
 DOMAIN-SUFFIX,opensource.guide
