@@ -45,8 +45,8 @@ rule_groups:
     name: "🕸️ 漏网之鱼"
     is_catchall: true   # MATCH 兜底
 
-# 国家池：按节点名正则分类（节点命名必须含国家标识）
-# 每个国家会生成一个 url-test 组（该国节点中最快）
+# 国家自动组：每个国家均按节点名正则筛选后，以 url-test 自动选择最低延迟节点。
+# 当前 EdgeTunnel 节点池已识别日本、新加坡、美国、德国、荷兰；新增国家时同步追加一项。
 countries:
   - name: "🇯🇵 日本"
     match: "(?i)日本|jp"
@@ -54,31 +54,27 @@ countries:
     match: "(?i)新加坡|sg"
   - name: "🇺🇸 美国"
     match: "(?i)美国|us"
-  - name: "🇭🇰 香港"
-    match: "(?i)香港|hk"
+  - name: "🇩🇪 德国"
+    match: "(?i)德国|de"
+  - name: "🇳🇱 荷兰"
+    match: "(?i)荷兰|nl"
 
-# 每个业务组统一提供三种选择模式
-# 🚀 自动 = url-test(全部节点)；🌏 国家 = select(国家) → url-test(该国节点)
-# 🎯 手动 = select → fallback(主→备→自动)
+# 共享策略组：
+#   🚀 自动：全部节点 url-test；各 countries 项：各自国家节点 url-test。
+#   🎯 手动：可选全局自动、任一国家自动，并列出全部原始节点供逐节点选择。
+# 不设「国家」容器组，也不设任何 HA/fallback 组。
 modes:
   auto:
     name: "🚀 自动"
     type: url-test
-  country:
-    name: "🌏 国家"
-    type: select
+    scope: all_nodes
+  country_auto:
+    type: url-test
+    scope: country_nodes
   manual:
     name: "🎯 手动"
     type: select
-    failover_type: fallback
-    # 故障转移链：主节点 → 备用节点 1 → 备用节点 2 → 🚀 自动（全节点兜底）
-    # 主/备用节点由用户在生成时指定；fallback 永远选第一个健康节点，主恢复自动切回
-    failover_chain:
-      - "主节点（用户指定）"
-      - "备用节点 1"
-      - "备用节点 2"
-      - "🚀 自动"
-
+    includes: ["🚀 自动", "各国家自动组", "全部原始节点"]
 # 客户端格式兼容：同一套规则，按客户端输出对应格式
 # 生成器据此决定每个客户端如何消费本仓库规则
 clients:

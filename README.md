@@ -3,7 +3,7 @@
 EdgeTunnel 2.1 节点 + 本仓库分流规则 → 统一 Mihomo/Nikki 订阅 的**规则端**。
 
 - EdgeTunnel 2.1 负责：生成 VLESS + XHTTP + Cloudflare 节点
-- 本仓库负责：分流规则、业务组定义、国家识别、测速参数、三级代理组结构
+- 本仓库负责：分流规则、业务组定义、国家识别、测速参数、全局/国家自动与手动选择结构
 
 ## 订阅转换配置地址（EdgeTunnel 2.1 后台填这个）
 
@@ -20,7 +20,7 @@ https://raw.githubusercontent.com/hinemo/edgetunnel-rules/main/subconverter/conf
 ```
 config.yaml           规则元数据：业务组 / geosite 类目 / 补充规则 / 评估顺序 / 测速 / 国家识别
 template/
-  proxy-groups.yaml   三级代理组结构模板（业务组 → 模式 → 国家 → 手动HA）
+  proxy-groups.yaml   代理组结构模板（全局自动 / 各国家自动 / 手动逐节点选择）
 rule-sets/
   cn.list             🇨🇳 国内直连补充（Clash 通用格式）
   media.list          🌍 媒体/社交（geosite 类目解析后的通用域名列表）
@@ -85,8 +85,8 @@ raw 地址示例：`https://raw.githubusercontent.com/hinemo/edgetunnel-rules/ma
 
 - 测速：`https://cp.cloudflare.com/generate_204`，`interval: 300`，`tolerance: 50`
 - 国家池：按 `config.yaml` 中 `countries[].match` 正则对节点名分类
-- 业务组模式：🚀 自动（全节点最快）/ 🌏 国家（国家内最快）/ 🎯 手动（指定节点 + 故障转移）
-- 代理组结构：见 `template/proxy-groups.yaml`（三级结构模板，生成器套用后输出最终订阅）
+- 业务组模式：🚀 自动（全节点最快）/ 各国家自动组（该国最快）/ 🎯 手动（国家选择 + 全部节点逐个选择）
+- 代理组结构：见 `template/proxy-groups.yaml`（无“国家”容器、无 HA/fallback 组）
 
 ## 测速规则语义（重要）
 
